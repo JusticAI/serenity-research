@@ -1,0 +1,5 @@
+tweet_id,created_at,author,text,url,like_count,repost_count,reply_count,quote_count
+1,2024-01-10T12:00:00Z,aleabitoreddit,"AI datacenter bandwidth is the bottleneck. Copper will struggle, optical interconnects and photonics matter. $AAOI $MRVL",https://x.com/example/status/1,1200,200,50,30
+2,2024-02-15T12:00:00Z,aleabitoreddit,"The real chokepoint may be InP substrates. If CPO adoption accelerates, materials suppliers like $AXTI could matter more than people think.",https://x.com/example/status/2,2400,350,80,40
+3,2024-03-20T12:00:00Z,aleabitoreddit,"Robotics is downstream of AI, sensors, actuators, power density, and edge inference. The supply chain will matter more than humanoid demos.",https://x.com/example/status/3,900,120,25,10
+4,2024-04-25T12:00:00Z,aleabitoreddit,"I do not want the obvious winner only. I want the small misunderstood company sitting at the bottleneck of a massive adoption curve. $SIVE",https://x.com/example/status/4,3100,500,110,60

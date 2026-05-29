@@ -1,0 +1,209 @@
+{
+  "nodes": [
+    {
+      "id": "post:1",
+      "type": "Post",
+      "text": "AI datacenter bandwidth is the bottleneck. Copper will struggle, optical interconnects and photonics matter. $AAOI $MRVL",
+      "author": "aleabitoreddit"
+    },
+    {
+      "id": "ticker:AAOI",
+      "type": "Ticker",
+      "name": "AAOI"
+    },
+    {
+      "id": "ticker:MRVL",
+      "type": "Ticker",
+      "name": "MRVL"
+    },
+    {
+      "id": "theme:Photonics",
+      "type": "Theme",
+      "name": "Photonics"
+    },
+    {
+      "id": "theme:Networking",
+      "type": "Theme",
+      "name": "Networking"
+    },
+    {
+      "id": "theme:AI",
+      "type": "Theme",
+      "name": "AI"
+    },
+    {
+      "id": "theme:Datacenter",
+      "type": "Theme",
+      "name": "Datacenter"
+    },
+    {
+      "id": "theme:Optics",
+      "type": "Theme",
+      "name": "Optics"
+    },
+    {
+      "id": "theme:Framework",
+      "type": "Theme",
+      "name": "Framework"
+    },
+    {
+      "id": "post:2",
+      "type": "Post",
+      "text": "The real chokepoint may be InP substrates. If CPO adoption accelerates, materials suppliers like $AXTI could matter more than people think.",
+      "author": "aleabitoreddit"
+    },
+    {
+      "id": "ticker:AXTI",
+      "type": "Ticker",
+      "name": "AXTI"
+    },
+    {
+      "id": "theme:Materials",
+      "type": "Theme",
+      "name": "Materials"
+    },
+    {
+      "id": "theme:CPO",
+      "type": "Theme",
+      "name": "CPO"
+    },
+    {
+      "id": "theme:Macro",
+      "type": "Theme",
+      "name": "Macro"
+    },
+    {
+      "id": "post:3",
+      "type": "Post",
+      "text": "Robotics is downstream of AI, sensors, actuators, power density, and edge inference. The supply chain will matter more than humanoid demos.",
+      "author": "aleabitoreddit"
+    },
+    {
+      "id": "theme:Robotics",
+      "type": "Theme",
+      "name": "Robotics"
+    },
+    {
+      "id": "theme:Power",
+      "type": "Theme",
+      "name": "Power"
+    },
+    {
+      "id": "post:4",
+      "type": "Post",
+      "text": "I do not want the obvious winner only. I want the small misunderstood company sitting at the bottleneck of a massive adoption curve. $SIVE",
+      "author": "aleabitoreddit"
+    },
+    {
+      "id": "ticker:SIVE",
+      "type": "Ticker",
+      "name": "SIVE"
+    }
+  ],
+  "edges": [
+    {
+      "source": "post:1",
+      "target": "ticker:AAOI",
+      "relationship": "MENTIONS"
+    },
+    {
+      "source": "post:1",
+      "target": "ticker:MRVL",
+      "relationship": "MENTIONS"
+    },
+    {
+      "source": "post:1",
+      "target": "theme:Photonics",
+      "relationship": "SUPPORTS",
+      "score": 2.0
+    },
+    {
+      "source": "post:1",
+      "target": "theme:Networking",
+      "relationship": "SUPPORTS",
+      "score": 2.0
+    },
+    {
+      "source": "post:1",
+      "target": "theme:AI",
+      "relationship": "SUPPORTS",
+      "score": 1.0
+    },
+    {
+      "source": "post:1",
+      "target": "theme:Datacenter",
+      "relationship": "SUPPORTS",
+      "score": 1.0
+    },
+    {
+      "source": "post:1",
+      "target": "theme:Optics",
+      "relationship": "SUPPORTS",
+      "score": 1.0
+    },
+    {
+      "source": "post:1",
+      "target": "theme:Framework",
+      "relationship": "SUPPORTS",
+      "score": 1.0
+    },
+    {
+      "source": "post:2",
+      "target": "ticker:AXTI",
+      "relationship": "MENTIONS"
+    },
+    {
+      "source": "post:2",
+      "target": "theme:Materials",
+      "relationship": "SUPPORTS",
+      "score": 3.0
+    },
+    {
+      "source": "post:2",
+      "target": "theme:CPO",
+      "relationship": "SUPPORTS",
+      "score": 1.0
+    },
+    {
+      "source": "post:2",
+      "target": "theme:Macro",
+      "relationship": "SUPPORTS",
+      "score": 1.0
+    },
+    {
+      "source": "post:2",
+      "target": "theme:Framework",
+      "relationship": "SUPPORTS",
+      "score": 1.0
+    },
+    {
+      "source": "post:3",
+      "target": "theme:Robotics",
+      "relationship": "SUPPORTS",
+      "score": 5.0
+    },
+    {
+      "source": "post:3",
+      "target": "theme:AI",
+      "relationship": "SUPPORTS",
+      "score": 2.0
+    },
+    {
+      "source": "post:3",
+      "target": "theme:Power",
+      "relationship": "SUPPORTS",
+      "score": 2.0
+    },
+    {
+      "source": "post:4",
+      "target": "ticker:SIVE",
+      "relationship": "MENTIONS"
+    },
+    {
+      "source": "post:4",
+      "target": "theme:Framework",
+      "relationship": "SUPPORTS",
+      "score": 3.0
+    }
+  ]
+}
