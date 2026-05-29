@@ -1,11 +1,12 @@
 from __future__ import annotations
 
+import json
 import sqlite3
 from datetime import datetime
 from pathlib import Path
 from typing import Iterable
 
-from src.domain.models import Post, ThemeMatch, TickerMention
+from src.domain.models import Post, PostPrediction, PostThesis, ThemeMatch, TickerMention
 
 DEFAULT_DB_PATH = Path("data/processed/serenity.db")
 SCHEMA_PATH = Path(__file__).with_name("schema.sql")
@@ -21,7 +22,24 @@ def connect(db_path: str | Path = DEFAULT_DB_PATH) -> sqlite3.Connection:
 
 def init_db(conn: sqlite3.Connection) -> None:
     conn.executescript(SCHEMA_PATH.read_text(encoding="utf-8"))
+    _ensure_column(conn, "theses", "beneficiaries_json", "TEXT DEFAULT '[]'")
+    _ensure_column(conn, "theses", "risks_json", "TEXT DEFAULT '[]'")
+    _ensure_column(conn, "predictions", "direction", "TEXT DEFAULT 'uncertain'")
+    _ensure_column(conn, "predictions", "condition_text", "TEXT")
+    _ensure_column(conn, "predictions", "horizon", "TEXT")
+    _ensure_column(conn, "predictions", "confidence", "REAL DEFAULT 0.45")
     conn.commit()
+
+
+def _table_columns(conn: sqlite3.Connection, table_name: str) -> set[str]:
+    rows = conn.execute(f"PRAGMA table_info({table_name})").fetchall()
+    return {row[1] for row in rows}
+
+
+def _ensure_column(conn: sqlite3.Connection, table_name: str, column_name: str, definition: str) -> None:
+    if column_name in _table_columns(conn, table_name):
+        return
+    conn.execute(f"ALTER TABLE {table_name} ADD COLUMN {column_name} {definition}")
 
 
 def upsert_posts(conn: sqlite3.Connection, posts: Iterable[Post]) -> int:
@@ -90,6 +108,68 @@ def replace_theme_matches(conn: sqlite3.Connection, matches: Iterable[ThemeMatch
     conn.executemany(
         "INSERT OR IGNORE INTO theme_matches (theme, post_external_id, score) VALUES (?, ?, ?)",
         [(m.theme.value, m.post_external_id, m.score) for m in matches],
+    )
+    conn.commit()
+
+
+def replace_theses(conn: sqlite3.Connection, theses: Iterable[PostThesis]) -> None:
+    conn.execute("DELETE FROM theses")
+    conn.executemany(
+        """
+        INSERT INTO theses (
+            post_external_id,
+            summary,
+            theme,
+            confidence,
+            beneficiaries_json,
+            risks_json
+        )
+        VALUES (?, ?, ?, ?, ?, ?)
+        """,
+        [
+            (
+                thesis.post_external_id,
+                thesis.summary,
+                thesis.theme.value,
+                thesis.confidence,
+                json.dumps(thesis.beneficiaries, ensure_ascii=False),
+                json.dumps(thesis.risks, ensure_ascii=False),
+            )
+            for thesis in theses
+        ],
+    )
+    conn.commit()
+
+
+def replace_predictions(conn: sqlite3.Connection, predictions: Iterable[PostPrediction]) -> None:
+    conn.execute("DELETE FROM predictions")
+    conn.executemany(
+        """
+        INSERT INTO predictions (
+            post_external_id,
+            prediction_text,
+            prediction_date,
+            status,
+            direction,
+            condition_text,
+            horizon,
+            confidence
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        [
+            (
+                prediction.post_external_id,
+                prediction.text,
+                prediction.horizon,
+                prediction.status,
+                prediction.direction.value,
+                prediction.condition,
+                prediction.horizon,
+                prediction.confidence,
+            )
+            for prediction in predictions
+        ],
     )
     conn.commit()
 

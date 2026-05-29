@@ -7,6 +7,7 @@ from src.analysis.success_case_analysis import candidate_success_cases
 from src.analysis.timeline_analysis import posts_by_year
 from src.analysis.topic_analysis import theme_counts, ticker_counts
 from src.domain.models import Post
+from src.extraction.prediction_extractor import extract_post_predictions
 from src.extraction.thesis_extractor import simple_thesis_from_post
 
 
@@ -25,13 +26,14 @@ def generate_markdown_report(posts: list[Post], output_path: str | Path) -> Path
     timeline = posts_by_year(posts)
     success_cases = candidate_success_cases(posts)
     theses = [simple_thesis_from_post(post) for post in posts[:20]]
+    predictions = extract_post_predictions(posts[:30])
 
     lines: list[str] = []
     lines.append("# Serenity Research Report\n\n")
     lines.append("## Executive Summary\n\n")
     lines.append(
-        "This report summarizes imported public posts and extracts a first-pass view of recurring investment themes, tickers, and thesis patterns. "
-        "The MVP uses deterministic rules; deeper LLM-based thesis extraction should be added in Phase 2.\n\n"
+        "This report summarizes imported public posts and extracts a first-pass view of recurring investment themes, tickers, thesis objects, and prediction objects. "
+        "Phase 2 adds structured thesis and prediction extraction with LLM-ready interfaces and deterministic fallback logic.\n\n"
     )
 
     lines.append("## Core Investment Philosophy Detected\n\n")
@@ -71,6 +73,22 @@ def generate_markdown_report(posts: list[Post], output_path: str | Path) -> Path
             lines.append(f"- {date}: {post.text[:220]}\n")
         lines.append("\n")
 
+    lines.append("## Extracted Predictions\n\n")
+    if predictions:
+        for prediction in predictions[:20]:
+            lines.append(
+                f"- Post `{prediction.post_external_id}` | Direction: **{prediction.direction.value}** | "
+                f"Confidence: {prediction.confidence:.2f}\n"
+            )
+            lines.append(f"  - {prediction.text[:240]}\n")
+            if prediction.condition:
+                lines.append(f"  - Condition: {prediction.condition}\n")
+            if prediction.horizon:
+                lines.append(f"  - Horizon: {prediction.horizon}\n")
+    else:
+        lines.append("No prediction-like statements detected in current dataset.\n")
+    lines.append("\n")
+
     lines.append("## Candidate Success Cases\n\n")
     if success_cases:
         for ticker, texts in sorted(success_cases.items()):
@@ -84,7 +102,6 @@ def generate_markdown_report(posts: list[Post], output_path: str | Path) -> Path
     lines.append(f"{failure_review_placeholder()}\n\n")
 
     lines.append("## Next Steps\n\n")
-    lines.append("- Add LLM-based thesis extraction.\n")
     lines.append("- Add market-data validation for predictions.\n")
     lines.append("- Add multi-analyst profiles.\n")
     lines.append("- Add Streamlit dashboard.\n")

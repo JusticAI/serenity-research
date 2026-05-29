@@ -6,6 +6,8 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
+from src.extraction.prediction_extractor import extract_post_predictions
+from src.extraction.thesis_extractor import extract_post_theses
 from src.extraction.theme_extractor import extract_theme_matches
 from src.extraction.ticker_extractor import extract_ticker_mentions
 from src.graph.build_graph import export_graph_json
@@ -19,6 +21,8 @@ from src.storage.db import (
     init_db,
     query_theme,
     query_ticker,
+    replace_predictions,
+    replace_theses,
     replace_theme_matches,
     replace_ticker_mentions,
     upsert_posts,
@@ -46,16 +50,24 @@ def import_posts(path: Path, db_path: Path = DEFAULT_DB_PATH) -> None:
 
 @app.command()
 def analyze(db_path: Path = DEFAULT_DB_PATH) -> None:
-    """Run deterministic extraction for tickers and themes."""
+    """Run extraction for tickers, themes, theses, and predictions."""
     conn = connect(db_path)
     init_db(conn)
     posts = fetch_posts(conn)
     ticker_mentions = extract_ticker_mentions(posts)
     theme_matches = extract_theme_matches(posts)
+    theses = extract_post_theses(posts)
+    predictions = extract_post_predictions(posts)
     replace_ticker_mentions(conn, ticker_mentions)
     replace_theme_matches(conn, theme_matches)
+    replace_theses(conn, theses)
+    replace_predictions(conn, predictions)
     console.print(
-        f"Analyzed {len(posts)} post(s): {len(ticker_mentions)} ticker mention(s), {len(theme_matches)} theme match(es)."
+        f"Analyzed {len(posts)} post(s): "
+        f"{len(ticker_mentions)} ticker mention(s), "
+        f"{len(theme_matches)} theme match(es), "
+        f"{len(theses)} thesis object(s), "
+        f"{len(predictions)} prediction object(s)."
     )
 
 

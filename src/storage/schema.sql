@@ -31,7 +31,9 @@ CREATE TABLE IF NOT EXISTS theses (
     post_external_id TEXT NOT NULL,
     summary TEXT NOT NULL,
     theme TEXT,
-    confidence REAL DEFAULT 0.5
+    confidence REAL DEFAULT 0.5,
+    beneficiaries_json TEXT DEFAULT '[]',
+    risks_json TEXT DEFAULT '[]'
 );
 
 CREATE TABLE IF NOT EXISTS predictions (
@@ -39,7 +41,11 @@ CREATE TABLE IF NOT EXISTS predictions (
     post_external_id TEXT NOT NULL,
     prediction_text TEXT NOT NULL,
     prediction_date TEXT,
-    status TEXT DEFAULT 'unreviewed'
+    status TEXT DEFAULT 'unreviewed',
+    direction TEXT DEFAULT 'uncertain',
+    condition_text TEXT,
+    horizon TEXT,
+    confidence REAL DEFAULT 0.45
 );
 
 CREATE TABLE IF NOT EXISTS relationships (
