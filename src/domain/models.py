@@ -54,6 +54,35 @@ class Thesis(BaseModel):
     confidence: float = Field(default=0.5, ge=0, le=1)
 
 
+class PostThesis(BaseModel):
+    post_external_id: str
+    summary: str
+    theme: ThemeName = ThemeName.UNKNOWN
+    beneficiaries: list[str] = Field(default_factory=list)
+    risks: list[str] = Field(default_factory=list)
+    confidence: float = Field(default=0.5, ge=0, le=1)
+
+
+class PredictionDirection(StrEnum):
+    BULLISH = "bullish"
+    BEARISH = "bearish"
+    CONDITIONAL = "conditional"
+    UNCERTAIN = "uncertain"
+
+
+class Prediction(BaseModel):
+    text: str
+    direction: PredictionDirection = PredictionDirection.UNCERTAIN
+    condition: str | None = None
+    horizon: str | None = None
+    confidence: float = Field(default=0.45, ge=0, le=1)
+    status: str = "unreviewed"
+
+
+class PostPrediction(Prediction):
+    post_external_id: str
+
+
 class ReportPaths(BaseModel):
     database: str
     markdown_report: str
